@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import {OutTable, ExcelRenderer} from 'react-excel-renderer';
+import './ConfirmSubmit'
+
+import {OutTable, ExcelRenderer} from './ExcelRenderer';
 import { Jumbotron, Col, Input, InputGroup, InputGroupAddon, FormGroup, Label, Button, Fade, FormFeedback, Container, Card } from 'reactstrap';
+import { ConfirmSubmit } from './ConfirmSubmit';
 
 class App extends Component {
   constructor(props){
@@ -10,8 +13,9 @@ class App extends Component {
       isOpen: false,
       dataLoaded: false,
       isFormInvalid: false,
-      rows: null,
-      cols: null
+      uploadedFileName: '',
+      rows: {},
+      cols: {}
     }
     this.fileHandler = this.fileHandler.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -75,10 +79,22 @@ class App extends Component {
     window.open(url, '_blank');
   }
 
+  submitToMiddleware=(json) =>{
+    alert(json);
+    this.setState({
+      isOpen: false,
+      dataLoaded: false,
+      isFormInvalid: false,
+      uploadedFileName: '',
+      rows: {},
+      cols: {}
+    })
+  }
+
   render() {
     return (
       <div>
-        <div>
+        {/* <div>
           <Jumbotron className="jumbotron-background">          
               <h1 className="display-3">react-excel-renderer</h1>
               <p className="lead">Welcome to the demo of react-excel-renderer.</p>  
@@ -87,7 +103,7 @@ class App extends Component {
               <hr className="my-2" />
               <p>Developed with <span className="fa fa-heart"></span> by Ashish Deshpande</p>
           </Jumbotron>
-        </div>
+        </div> */}
         <Container>
         <form>
           <FormGroup row>
@@ -118,6 +134,10 @@ class App extends Component {
           </Card>  
         </div>}
         </Container>
+        {this.state.dataLoaded && 
+          <ConfirmSubmit data={this.state.rows} callback={this.submitToMiddleware}></ConfirmSubmit>
+        }
+
       </div>
     );
   }
